@@ -1,218 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register | StudySmart Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <style>
-        /* 🌈 Animated Gradient Background */
         body {
-          margin: 0;
-          padding: 0;
-          font-family: "Poppins", sans-serif;
-          background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff6a00, #ee0979);
-          background-size: 400% 400%;
-          height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          animation: gradientMove 12s ease infinite;
-          overflow: hidden;
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff6a00, #ee0979);
+            background-size: 400% 400%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: gradientMove 12s ease infinite;
+            overflow: hidden;
         }
 
         @keyframes gradientMove {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* ✨ Floating Particles */
-        .particles {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          top: 0;
-          left: 0;
-          z-index: 0;
-        }
-        .particle {
-          position: absolute;
-          background: rgba(255, 255, 255, 0.3);
-          border-radius: 50%;
-          animation: float 8s infinite ease-in-out;
-        }
+        .particles { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; }
+        .particle { position: absolute; background: rgba(255, 255, 255, 0.3); border-radius: 50%; animation: float 8s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
 
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-30px); }
-        }
-
-        /* 🧊 Glass Card */
         .container {
-          position: relative;
-          z-index: 10;
-          background: rgba(255, 255, 255, 0.15);
-          backdrop-filter: blur(20px);
-          border-radius: 25px;
-          padding: 50px 40px;
-          width: 90%;
-          max-width: 420px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-          animation: fadeInUp 1s ease;
-          color: #fff;
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px 40px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            animation: fadeInUp 1s ease;
+            color: #fff;
         }
 
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(50px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
         .container h2 {
-          text-align: center;
-          font-size: 32px;
-          background: linear-gradient(135deg, #fff, #ffeaa7);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin-bottom: 25px;
-          letter-spacing: 1px;
+            text-align: center;
+            font-size: 32px;
+            background: linear-gradient(135deg, #fff, #ffeaa7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
         }
 
-        /* 🎯 Input Fields */
-        .input-group {
-          margin: 18px 0;
-          position: relative;
-        }
-
+        .input-group { margin: 18px 0; position: relative; }
         input {
-          width: 100%;
-          padding: 15px 20px;
-          border: none;
-          border-radius: 12px;
-          background: rgba(255, 255, 255, 0.9);
-          font-size: 16px;
-          outline: none;
-          color: #333;
-          transition: 0.3s;
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            outline: none;
+            color: #333;
+            transition: 0.3s;
         }
+        input:focus { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); transform: scale(1.02); }
 
-        input:focus {
-          box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-          transform: scale(1.02);
-        }
+        .password-strength { height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 2px; margin-top: 5px; }
+        .strength-bar { height: 100%; width: 0%; border-radius: 2px; transition: width 0.3s, background 0.3s; }
 
-        /* Password Strength */
-        .password-strength {
-          height: 4px;
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 2px;
-          margin-top: 5px;
-        }
-
-        .strength-bar {
-          height: 100%;
-          width: 0%;
-          border-radius: 2px;
-          transition: width 0.3s, background 0.3s;
-        }
-
-        /* ✅ Button */
         .btn-register {
-          width: 100%;
-          background: linear-gradient(135deg, #00c6ff, #0072ff);
-          color: #fff;
-          padding: 14px;
-          font-size: 17px;
-          font-weight: 600;
-          border: none;
-          border-radius: 12px;
-          margin-top: 20px;
-          cursor: pointer;
-          transition: 0.4s;
-          box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
+            width: 100%;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: #fff;
+            padding: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.4);
         }
+        .btn-register:hover { background: linear-gradient(135deg, #42a5f5, #3f51b5); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(63, 81, 181, 0.5); }
 
-        .btn-register:hover {
-          background: linear-gradient(135deg, #42a5f5, #3f51b5);
-          transform: translateY(-3px);
-          box-shadow: 0 8px 25px rgba(63, 81, 181, 0.5);
-        }
-
-        /* ⚙️ Social Login Buttons */
-        .social-login {
-          margin-top: 25px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .social-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          border: none;
-          border-radius: 12px;
-          padding: 12px;
-          font-weight: 500;
-          cursor: pointer;
-          font-size: 15px;
-          transition: 0.3s;
-        }
-
+        .social-login { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; }
+        .social-btn { display: flex; align-items: center; justify-content: center; gap: 10px; border: none; border-radius: 12px; padding: 12px; font-weight: 500; cursor: pointer; font-size: 15px; transition: 0.3s; }
         .google { background: #fff; color: #333; }
         .google:hover { background: #f1f1f1; }
         .github { background: #24292e; color: #fff; }
         .github:hover { background: #000; }
         .facebook { background: #1877f2; color: #fff; }
         .facebook:hover { background: #0e5ad0; }
+        .social-btn img { width: 22px; height: 22px; }
 
-        .social-btn img {
-          width: 22px;
-          height: 22px;
+        .terms { margin-top: 15px; display: flex; align-items: center; font-size: 14px; }
+        .terms input { width: auto; margin-right: 10px; }
+        .terms-link {
+            color: #ffeaa7;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .terms-link:hover {
+            text-decoration: underline;
+            text-shadow: 0 0 8px rgba(255, 234, 167, 0.5);
         }
 
-        /* 🧾 Terms */
-        .terms {
-          margin-top: 15px;
-          display: flex;
-          align-items: center;
-          font-size: 14px;
+        .login-link { margin-top: 20px; text-align: center; font-size: 15px; }
+        .login-link a { color: #fff; text-decoration: none; font-weight: 500; }
+        .login-link a:hover { color: #ffeaa7; }
+
+        .error, .success { text-align: center; padding: 14px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; font-weight: 500; backdrop-filter: blur(10px); }
+        .error { background: rgba(255, 0, 0, 0.25); color: #ffb3b3; }
+        .success { background: rgba(0, 255, 100, 0.25); color: #b2ffb3; }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
         }
 
-        .terms input {
-          width: auto;
-          margin-right: 10px;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .terms a {
-          color: #ffeaa7;
-          text-decoration: none;
+        .modal-container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s ease;
+            overflow-y: auto;
         }
 
-        .terms a:hover { text-decoration: underline; }
-
-        /* 🔗 Login Link */
-        .login-link {
-          margin-top: 20px;
-          text-align: center;
-          font-size: 15px;
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .login-link a {
-          color: #fff;
-          text-decoration: none;
-          font-weight: 500;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
-        .login-link a:hover {
-          color: #ffeaa7;
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 32px;
+            color: #ff4757;
+            cursor: pointer;
+            line-height: 1;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.2);
+            color: #ff3838;
+        }
+
+        .modal-content {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            color: #2d3436;
+            font-size: 20px;
+            margin-bottom: 10px;
+            border-left: 4px solid #00c6ff;
+            padding-left: 10px;
+        }
+
+        .modal-section p {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .modal-section ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-section li {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .modal-footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn-accept {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3);
+        }
+
+        .btn-accept:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 114, 255, 0.4);
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         @media (max-width: 480px) {
-          .container {
-            padding: 35px 25px;
-          }
+            .container { padding: 35px 25px; }
+            .container h2 { font-size: 26px; }
+            .social-login { gap: 8px; }
+            .social-btn { font-size: 14px; padding: 10px; }
+            .modal-container { padding: 20px; }
+            .modal-title { font-size: 24px; }
         }
     </style>
 </head>
@@ -223,83 +279,276 @@
 <div class="container">
     <h2>Join StudySmart Pro</h2>
 
-    <form th:action="@{/register}" method="post" id="registerForm">
-        <div class="input-group">
-            <input type="text" name="username" placeholder="👤 Choose Username" required />
-        </div>
+    <!-- Error & Success Messages -->
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <div th:if="${success}" class="success" th:text="${success}"></div>
 
+    <form th:action="@{/auth/register}" method="post" id="registerForm">
         <div class="input-group">
-            <input type="email" name="email" placeholder="📧 Enter Email" required />
+            <input type="text" name="username" placeholder="👤 Choose Username" required aria-label="Username" />
         </div>
-
         <div class="input-group">
-            <input type="password" name="password" id="password" placeholder="🔒 Create Password" required />
+            <input type="email" name="email" placeholder="📧 Enter Email" required aria-label="Email" />
+        </div>
+        <div class="input-group">
+            <input type="password" name="password" id="password" placeholder="🔒 Create Password" required aria-label="Password" />
             <div class="password-strength"><div class="strength-bar" id="strengthBar"></div></div>
         </div>
-
         <div class="input-group">
-            <input type="password" name="confirmPassword" placeholder="🔒 Confirm Password" required />
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="🔒 Confirm Password" required aria-label="Confirm Password" />
         </div>
-
         <div class="terms">
-            <input type="checkbox" id="terms" required />
-            <label for="terms">I agree to the <a href="#">Terms & Conditions</a></label>
+            <label for="terms">
+                <input type="checkbox" id="terms" required /> I agree to the
+                <span class="terms-link" id="showTerms">Terms & Conditions</span>
+            </label>
         </div>
 
         <button type="submit" class="btn-register">Create Account</button>
 
         <div class="social-login">
-            <button type="button" class="social-btn google">
-                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="Google" /> Sign up with Google
-            </button>
+            <!-- Google Identity Services -->
+            <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-            <button type="button" class="social-btn github">
+            <!-- Google One Tap / Sign-in Button -->
+            <div id="g_id_onload"
+                 data-client_id="753396852554-rfqhhu5rujso5b3vfqh7ajelr07ecbjb.apps.googleusercontent.com"
+                 data-login_uri="/auth/google/callback"
+                 data-auto_prompt="false">
+            </div>
+
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-size="large">
+            </div>
+
+            <button type="button" class="social-btn github" aria-label="Sign up with GitHub">
                 <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub" /> Sign up with GitHub
             </button>
-
-            <button type="button" class="social-btn facebook">
+            <button type="button" class="social-btn facebook" aria-label="Sign up with Facebook"
+                    onclick="window.location.href='/oauth2/authorization/facebook'">
                 <img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" alt="Facebook" /> Sign up with Facebook
             </button>
+
         </div>
 
         <div class="login-link">
-            Already have an account? <a th:href="@{/login}">Login</a>
+            Already have an account? <a th:href="@{/auth/login}">Login</a>
         </div>
     </form>
 </div>
 
+<!-- TERMS MODAL -->
+<div class="modal-overlay" id="termsModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 class="modal-title">Terms & Conditions</h2>
+            <button class="modal-close" id="closeModal">&times;</button>
+        </div>
+
+        <div class="modal-content">
+            <div class="modal-section">
+                <h3>Welcome to StudySmart Pro!</h3>
+                <p>By accessing or using our platform, you agree to be bound by these Terms and Conditions. Please read them carefully.</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>1. Account Registration</h3>
+                <p>You must provide accurate and complete information during registration. You are responsible for:</p>
+                <ul>
+                    <li>Maintaining the confidentiality of your account credentials</li>
+                    <li>All activities that occur under your account</li>
+                    <li>Notifying us immediately of any unauthorized access</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>2. User Responsibilities</h3>
+                <p>As a user, you agree to:</p>
+                <ul>
+                    <li>Use the platform for lawful purposes only</li>
+                    <li>Not upload or share harmful, offensive, or illegal content</li>
+                    <li>Respect intellectual property rights of others</li>
+                    <li>Not attempt to disrupt or hack the platform</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>3. Content Usage</h3>
+                <p>All educational content provided on StudySmart Pro is for personal learning purposes only. You may not:</p>
+                <ul>
+                    <li>Redistribute or sell the content without permission</li>
+                    <li>Use automated tools to scrape or download content</li>
+                    <li>Modify and claim ownership of provided materials</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>4. Privacy Policy</h3>
+                <p>We collect and use your personal information as described in our Privacy Policy. By using our services, you consent to:</p>
+                <ul>
+                    <li>Collection of registration information</li>
+                    <li>Usage data tracking for service improvement</li>
+                    <li>Communication regarding platform updates</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>5. Subscription & Payments</h3>
+                <p>Certain features may require subscription payments:</p>
+                <ul>
+                    <li>Payments are processed through secure gateways</li>
+                    <li>Subscriptions auto-renew unless cancelled</li>
+                    <li>Refunds are subject to our refund policy</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>6. Termination</h3>
+                <p>We reserve the right to suspend or terminate accounts that:</p>
+                <ul>
+                    <li>Violate these terms and conditions</li>
+                    <li>Engage in fraudulent activities</li>
+                    <li>Cause harm to other users or the platform</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>7. Disclaimer</h3>
+                <p>StudySmart Pro provides educational content "as is." We do not guarantee:</p>
+                <ul>
+                    <li>Uninterrupted or error-free service</li>
+                    <li>Specific learning outcomes or results</li>
+                    <li>Accuracy of all educational materials</li>
+                </ul>
+            </div>
+
+            <div class="modal-section">
+                <h3>8. Changes to Terms</h3>
+                <p>We may modify these terms at any time. Continued use after changes constitutes acceptance of new terms.</p>
+            </div>
+
+            <div class="scroll-indicator">
+                📜 Please read all terms before accepting
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-accept" id="acceptTerms">I Accept Terms & Conditions</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    // Floating particles
+    // PARTICLES
     const particles = document.getElementById("particles");
-    for (let i = 0; i < 10; i++) {
-      const p = document.createElement("div");
-      p.classList.add("particle");
-      const size = Math.random() * 40 + 10;
-      p.style.width = `${size}px`;
-      p.style.height = `${size}px`;
-      p.style.left = `${Math.random() * 100}%`;
-      p.style.top = `${Math.random() * 100}%`;
-      p.style.animationDuration = `${Math.random() * 10 + 5}s`;
-      p.style.opacity = Math.random() * 0.4;
-      particles.appendChild(p);
+    for (let i = 0; i < 25; i++) {
+        const p = document.createElement("div");
+        p.classList.add("particle");
+        const size = Math.random() * 40 + 10;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.top = `${Math.random() * 100}%`;
+        p.style.animationDuration = `${Math.random() * 10 + 5}s`;
+        p.style.opacity = Math.random() * 0.4;
+        particles.appendChild(p);
     }
 
-    // Password Strength Indicator
+    // PASSWORD STRENGTH
     const password = document.getElementById("password");
     const strengthBar = document.getElementById("strengthBar");
 
     password.addEventListener("input", () => {
-      let val = password.value;
-      let strength = 0;
-      if (val.length >= 8) strength += 25;
-      if (/[A-Z]/.test(val)) strength += 25;
-      if (/[0-9]/.test(val)) strength += 25;
-      if (/[^A-Za-z0-9]/.test(val)) strength += 25;
-
-      strengthBar.style.width = strength + "%";
-      strengthBar.style.background =
-        strength < 50 ? "#ff4757" : strength < 75 ? "#ffa502" : "#2ed573";
+        let val = password.value;
+        let strength = 0;
+        if (!val) strength = 0;
+        else {
+            if (val.length >= 8) strength += 25;
+            if (/[A-Z]/.test(val)) strength += 25;
+            if (/[0-9]/.test(val)) strength += 25;
+            if (/[^A-Za-z0-9]/.test(val)) strength += 25;
+        }
+        strengthBar.style.width = strength + "%";
+        strengthBar.style.background = strength < 50 ? "#ff4757" : strength < 75 ? "#ffa502" : "#2ed573";
     });
+
+    // CONFIRM PASSWORD VALIDATION
+    const form = document.getElementById("registerForm");
+    form.addEventListener("submit", (e) => {
+        const confirmVal = document.getElementById("confirmPassword").value;
+        const termsChecked = document.getElementById("terms").checked;
+
+        if (password.value !== confirmVal) {
+            e.preventDefault();
+            alert("Passwords do not match!");
+            return;
+        }
+
+        if (!termsChecked) {
+            e.preventDefault();
+            alert("Please agree to the Terms & Conditions!");
+            return;
+        }
+    });
+
+    // TERMS MODAL FUNCTIONALITY
+    const termsModal = document.getElementById("termsModal");
+    const showTermsBtn = document.getElementById("showTerms");
+    const closeModalBtn = document.getElementById("closeModal");
+    const acceptTermsBtn = document.getElementById("acceptTerms");
+    const termsCheckbox = document.getElementById("terms");
+
+    // Show modal
+    showTermsBtn.addEventListener("click", () => {
+        termsModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    });
+
+    // Close modal
+    closeModalBtn.addEventListener("click", () => {
+        termsModal.style.display = "none";
+        document.body.style.overflow = "auto";
+    });
+
+    // Accept terms
+    acceptTermsBtn.addEventListener("click", () => {
+        termsCheckbox.checked = true;
+        termsModal.style.display = "none";
+        document.body.style.overflow = "auto";
+        alert("Thank you for accepting our Terms & Conditions!");
+    });
+
+    // Close modal when clicking outside
+    termsModal.addEventListener("click", (e) => {
+        if (e.target === termsModal) {
+            termsModal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+    });
+
+    // Close with Escape key
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && termsModal.style.display === "flex") {
+            termsModal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+    });
+    function handleCredentialResponse(response) {
+        fetch("/auth/google/callback", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ credential: response.credential })
+        })
+            .then(res => {
+                if(res.ok) {
+                    window.location.href = "/dashboard";
+                } else {
+                    alert("Google login failed!");
+                }
+            })
+            .catch(err => console.error(err));
+    }
 </script>
 </body>
 </html>

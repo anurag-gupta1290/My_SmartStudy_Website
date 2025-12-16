@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | StudySmart Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
         /* === Background Gradient Animation === */
         body {
@@ -22,7 +21,6 @@
           overflow: hidden;
         }
 
-        /* === Particle Layer === */
         .particles {
           position: absolute;
           top: 0;
@@ -40,7 +38,6 @@
           animation: float 6s infinite ease-in-out;
         }
 
-        /* === Main Card === */
         .container {
           background: rgba(255, 255, 255, 0.12);
           backdrop-filter: blur(25px);
@@ -69,7 +66,6 @@
           animation: rotateShine 6s linear infinite;
         }
 
-        /* === Title === */
         h2 {
           font-size: 32px;
           margin-bottom: 30px;
@@ -92,7 +88,6 @@
           border-radius: 2px;
         }
 
-        /* === Inputs === */
         .input-group {
           position: relative;
           margin: 25px 0;
@@ -117,7 +112,6 @@
           background: #fff;
         }
 
-        /* === Login Button === */
         .btn-login {
           width: 100%;
           padding: 15px;
@@ -140,7 +134,6 @@
           box-shadow: 0 10px 35px rgba(190, 190, 255, 0.4);
         }
 
-        /* === Error & Success Messages === */
         .error, .success {
           text-align: center;
           padding: 14px;
@@ -161,7 +154,6 @@
           color: #b2ffb3;
         }
 
-        /* === Register Link === */
         .register-link {
           margin-top: 25px;
           font-size: 15px;
@@ -180,7 +172,6 @@
           text-shadow: 0 0 8px rgba(0, 234, 255, 0.7);
         }
 
-        /* === Animations === */
         @keyframes gradientBG {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -202,7 +193,6 @@
           to { opacity: 1; transform: translateY(0); }
         }
 
-        /* === Responsive === */
         @media (max-width: 480px) {
           .container {
             padding: 35px 25px;
@@ -216,27 +206,22 @@
 </head>
 <body>
 
-<!-- Background Particles -->
 <div class="particles" id="particles"></div>
 
-<!-- Login Card -->
 <div class="container">
     <h2>Welcome Back 👋</h2>
 
     <!-- Error Message -->
-    <div th:if="${param.error}" class="error">
-        ❌ Invalid username or password!
-    </div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
 
-    <!-- Logout Message -->
-    <div th:if="${param.logout}" class="success">
-        ✅ You have been logged out successfully!
-    </div>
+    <!-- Success Message -->
+    <div th:if="${success}" class="success" th:text="${success}"></div>
 
     <!-- Login Form -->
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/auth/login}" method="post">
         <div class="input-group">
-            <input type="text" name="username" placeholder="👤 Username" required>
+            <!-- Change name to "email" -->
+            <input type="text" name="email" placeholder="👤 Enter your Email" required>
         </div>
         <div class="input-group">
             <input type="password" name="password" placeholder="🔒 Password" required>
@@ -244,13 +229,13 @@
         <button type="submit" class="btn-login">Login to StudySmart Pro</button>
     </form>
 
+
     <div class="register-link">
-        <a th:href="@{/register}">New here? Create your account →</a>
+        <a th:href="@{/auth/register}">New here? Create your account →</a>
     </div>
 </div>
 
 <script>
-    // Create floating particles
     function createParticles() {
       const container = document.getElementById("particles");
       const count = 20;
