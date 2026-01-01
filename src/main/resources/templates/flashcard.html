@@ -1,10 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Flash Cards</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6a5acd, #7b68ee);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+        }
+
+        .card-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            width: 45%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-add {
+            background: #6a5acd;
+            color: white;
+            width: 100%;
+        }
+
+        .flash-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .flash-card h3 {
+            margin: 0 0 5px 0;
+        }
+
+        .actions {
+            margin-top: 8px;
+        }
+
+        .edit {
+            background: #ffc107;
+            color: black;
+        }
+
+        .delete {
+            background: #dc3545;
+            color: white;
+            margin-left: 6px;
+        }
+    </style>
 </head>
 <body>
-$END$
+
+<h1>📚 Flash Cards</h1>
+
+<div class="container">
+
+    <!-- CREATE CARD -->
+    <div class="card-box">
+        <h2>Create Flash Card</h2>
+        <input type="hidden" id="cardId">
+
+        <input type="text" id="question" placeholder="Enter question">
+        <textarea id="answer" rows="4" placeholder="Enter answer"></textarea>
+
+        <button class="btn-add" onclick="saveCard()">Save</button>
+    </div>
+
+    <!-- LIST CARDS -->
+    <div class="card-box">
+        <h2>Your Flash Cards</h2>
+        <div id="cards"></div>
+    </div>
+
+</div>
+
+<script>
+    const API = "http://localhost:8089/flashcards";
+
+    function loadCards() {
+        fetch(API)
+            .then(res => res.json())
+            .then(data => {
+                const div = document.getElementById("cards");
+                div.innerHTML = "";
+                data.forEach(card => {
+                    div.innerHTML += `
+                        <div class="flash-card">
+                            <h3>${card.question}</h3>
+                            <p>${card.answer}</p>
+                            <div class="actions">
+                                <button class="edit" onclick="editCard(${card.id}, '${card.question}', '${card.answer}')">Edit</button>
+                                <button class="delete" onclick="deleteCard(${card.id})">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+    }
+
+    function saveCard() {
+        const id = document.getElementById("cardId").value;
+        const question = document.getElementById("question").value;
+        const answer = document.getElementById("answer").value;
+
+        if (!question || !answer) {
+            alert("Question & Answer required");
+            return;
+        }
+
+        const method = id ? "PUT" : "POST";
+        const url = id ? `${API}/${id}` : API;
+
+        fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question, answer })
+        }).then(() => {
+            resetForm();
+            loadCards();
+        });
+    }
+
+    function editCard(id, q, a) {
+        document.getElementById("cardId").value = id;
+        document.getElementById("question").value = q;
+        document.getElementById("answer").value = a;
+    }
+
+    function deleteCard(id) {
+        if (!confirm("Delete this card?")) return;
+
+        fetch(`${API}/${id}`, { method: "DELETE" })
+            .then(() => loadCards());
+    }
+
+    function resetForm() {
+        document.getElementById("cardId").value = "";
+        document.getElementById("question").value = "";
+        document.getElementById("answer").value = "";
+    }
+
+    loadCards();
+</script>
+
 </body>
 </html>

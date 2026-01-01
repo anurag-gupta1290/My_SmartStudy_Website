@@ -1,15 +1,14 @@
 package com.example.login_app.repository;
 
-import com.example.login_app.entity.User;
+import com.example.login_app.entity.FlashCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface FlashCardRepository extends JpaRepository<FlashCard, Long> {
 
-    // Must declare these methods so your service can use them
-    Optional<User> findByEmail(String email);
-    Optional<User> findByUsername(String username);
+    // Get all flashcards for a specific user
+    List<FlashCard> findByUserId(Long userId);
 }

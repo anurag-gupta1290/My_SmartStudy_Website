@@ -38,4 +38,18 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     // Get average progress by user
     @Query("SELECT AVG(c.progressPercentage) FROM Course c WHERE c.user.id = :userId")
     Double findAverageProgressByUserId(@Param("userId") Long userId);
+
+
+
+    // JPQL Query: Username aur Average Progress nikalne ke liye
+    @Query("SELECT c.user.username, AVG(c.progressPercentage) " +
+            "FROM Course c " +
+            "GROUP BY c.user.id, c.user.username " +
+            "ORDER BY AVG(c.progressPercentage) DESC")
+    List<Object[]> getLeaderboardData();
+
+    // Dynamic Study Time calculation logic
+    @Query("SELECT SUM(c.completedModules * 1.5) FROM Course c WHERE c.user.id = :userId")
+    Double calculateStudyTimeByUserId(@Param("userId") Long userId);
+
 }

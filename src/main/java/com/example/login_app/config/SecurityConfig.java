@@ -18,19 +18,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ Public URLs (login ke bina allowed)
                         .requestMatchers(
-                                "/auth/**",          // login, register
-                                "/auth/google/callback", // Google JWT callback
-                                "/dashboard",
+                                "/auth/**",
                                 "/css/**",
                                 "/js/**",
+                                "/api/notes/**",
+                                "/api/assignments/**",
                                 "/images/**"
                         ).permitAll()
+
+                        // 🔐 Baaki sab login ke baad
                         .anyRequest().authenticated()
                 )
-                // Existing form login
+
+                // ✅ Normal Form Login
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
@@ -40,31 +45,38 @@ public class SecurityConfig {
                         .failureUrl("/auth/login?error=true")
                         .permitAll()
                 )
-                // Facebook OAuth2 Login
+
+                // ✅ Google / Facebook OAuth Login
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/auth/login")               // Optional: show login page
-                        .defaultSuccessUrl("/dashboard", true)  // Redirect after Facebook login
+                        .loginPage("/auth/login")
+                        .defaultSuccessUrl("/dashboard", true)
                 )
+
+                // ✅ Logout
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/auth/login?logout=true")
                         .permitAll()
                 )
+
+                // ✅ CSRF disabled (development ke liye)
                 .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
 
+    // 🔐 Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // 🔑 Authentication Provider
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 }

@@ -58,4 +58,14 @@ public class UserService {
         }
         return false;
     }
+    // Login check karne ke liye method
+    public User authenticate(String email, String password) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+
+        // Agar user mil gaya aur password match ho gaya
+        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
+            return userOpt.get();
+        }
+        return null; // Login fail hone par null bhejega
+    }
 }

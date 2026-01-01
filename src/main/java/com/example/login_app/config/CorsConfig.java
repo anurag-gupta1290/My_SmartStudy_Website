@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig {
 
-    @Value("${login_app.cors.allowed-origins:http://localhost:3000,http://localhost:4200}")
+    @Value("${ai.gemini.key}")
     private String[] allowedOrigins;
 
     @Bean

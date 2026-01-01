@@ -47,7 +47,7 @@ public class DashboardService {
         progress1.setId(1L);
         progress1.setProgressPercentage(65.0);
         progress1.setCompletedModules(12);
-        progress1.setTotalModules(18);
+
 
         Course course1 = new Course();
         course1.setId(1L);
@@ -63,7 +63,7 @@ public class DashboardService {
         progress2.setId(2L);
         progress2.setProgressPercentage(42.0);
         progress2.setCompletedModules(8);
-        progress2.setTotalModules(19);
+
 
         Course course2 = new Course();
         course2.setId(2L);
@@ -79,7 +79,7 @@ public class DashboardService {
         progress3.setId(3L);
         progress3.setProgressPercentage(78.0);
         progress3.setCompletedModules(14);
-        progress3.setTotalModules(18);
+
 
         Course course3 = new Course();
         course3.setId(3L);

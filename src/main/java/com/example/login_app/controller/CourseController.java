@@ -58,6 +58,8 @@ public class CourseController {
         return progress != null ? ResponseEntity.ok(progress) : ResponseEntity.notFound().build();
     }
 
+
+
     // UNENROLL
     @DeleteMapping("/unenroll/{userId}/{courseId}")
     public ResponseEntity<Void> unenrollFromCourse(

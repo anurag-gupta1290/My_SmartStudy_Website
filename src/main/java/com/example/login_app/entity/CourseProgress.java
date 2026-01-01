@@ -11,6 +11,7 @@ public class CourseProgress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // JoinColumn name wahi hona chahiye jo aapke DB table mein hai
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -19,39 +20,32 @@ public class CourseProgress {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    private double progressPercentage;
+    @Column(name = "progress_percentage")
+    private double progressPercentage = 0.0;
+
+
+    @Column(name = "active")
     private boolean isActive = true;
 
+    @Column(name = "completed_modules")
     private Integer completedModules = 0;
-    private Integer totalModules = 0;
 
-    private LocalDateTime createdAt;
+    @Column(name = "last_accessed") // SQL schema ke column name ke saath match karne ke liye
     private LocalDateTime updatedAt;
 
     // ---------------- Constructors ----------------
 
+    // Default Constructor (Hibernate ke liye zaroori hai)
     public CourseProgress() {
     }
 
+    // Standard Constructor (Service layer ke liye)
     public CourseProgress(User user, Course course) {
         this.user = user;
         this.course = course;
         this.progressPercentage = 0.0;
         this.isActive = true;
         this.completedModules = 0;
-        this.totalModules = 0;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public CourseProgress(User user, Course course, double progressPercentage) {
-        this.user = user;
-        this.course = course;
-        this.progressPercentage = progressPercentage;
-        this.isActive = true;
-        this.completedModules = 0;
-        this.totalModules = 0;
-        this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
@@ -75,23 +69,12 @@ public class CourseProgress {
     public Integer getCompletedModules() { return completedModules; }
     public void setCompletedModules(Integer completedModules) { this.completedModules = completedModules; }
 
-    public Integer getTotalModules() { return totalModules; }
-    public void setTotalModules(Integer totalModules) { this.totalModules = totalModules; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    // ---------------- Convenience Methods ----------------
+    // ---------------- Persistence Hooks ----------------
 
     @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();

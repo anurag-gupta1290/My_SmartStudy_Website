@@ -11,7 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/assignments")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8089", allowCredentials = "true")
 public class AssignmentController {
 
     @Autowired
@@ -43,6 +44,7 @@ public class AssignmentController {
     public ResponseEntity<Assignment> createAssignment(
             @PathVariable Long userId,
             @RequestBody Assignment assignment) {
+        // Service level par user check hona zaroori hai
         Assignment created = assignmentService.createAssignment(userId, assignment);
         return created != null ? ResponseEntity.ok(created) : ResponseEntity.badRequest().build();
     }
@@ -55,12 +57,17 @@ public class AssignmentController {
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
+    // Purana method replace karein:
     @PutMapping("/{id}/submit")
-    public ResponseEntity<Assignment> submitAssignment(@PathVariable Long id) {
-        Assignment submitted = assignmentService.submitAssignment(id);
-        return submitted != null ? ResponseEntity.ok(submitted) : ResponseEntity.notFound().build();
-    }
+    public ResponseEntity<Assignment> submitAssignment(
+            @PathVariable Long id,
+            @RequestParam Long userId) { // userId add kiya validation ke liye
 
+        // Service ko ab dono IDs bhejein
+        Assignment submitted = assignmentService.submitAssignment(id, userId);
+
+        return submitted != null ? ResponseEntity.ok(submitted) : ResponseEntity.status(403).build();
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAssignment(@PathVariable Long id) {
         boolean success = assignmentService.deleteAssignment(id);

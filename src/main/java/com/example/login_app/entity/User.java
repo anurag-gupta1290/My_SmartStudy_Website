@@ -2,6 +2,8 @@ package com.example.login_app.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,11 +22,15 @@ public class User {
     private String password;
 
     @Column(name = "oauth_provider")
-    private String oauthProvider; //
+    private String oauthProvider;
 
-    private String role = "USER"; // default role
+    private String role = "USER";
 
-    // Constructors
+    // 🔗 One user can have many notes
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> notes;
+
+    // ===== Constructors =====
     public User() {}
 
     public User(String username, String email, String password) {
@@ -41,7 +47,8 @@ public class User {
         this.role = role;
     }
 
-    // Getters and setters
+    // ===== Getters & Setters =====
+
     public Long getId() {
         return id;
     }
@@ -69,27 +76,31 @@ public class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getOauthProvider() {
+        return oauthProvider;
+    }
+    public void setOauthProvider(String oauthProvider) {
+        this.oauthProvider = oauthProvider;
     }
 
     public String getRole() {
         return role;
     }
-    public String getOauthProvider() {
-        return oauthProvider;
-    }
-
-    public void setOauthProvider(String oauthProvider) {
-        this.oauthProvider = oauthProvider;
-    }
-
     public void setRole(String role) {
         this.role = role;
     }
 
-    // toString method for debugging
+    public List<Note> getNotes() {
+        return notes;
+    }
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
     @Override
     public String toString() {
         return "User{" +

@@ -55,8 +55,14 @@ public class AssignmentService {
         }).orElse(null);
     }
 
-    public Assignment submitAssignment(Long assignmentId) {
+    public Assignment submitAssignment(Long assignmentId, Long userId) {
         return assignmentRepository.findById(assignmentId).map(assignment -> {
+
+            // SECURITY CHECK: Kya ye assignment usi user ka hai?
+            if (!assignment.getUser().getId().equals(userId)) {
+                throw new RuntimeException("Security Alert: Unauthorized submission attempt!");
+            }
+
             assignment.setStatus("Submitted");
             assignment.setSubmittedAt(LocalDateTime.now());
             return assignmentRepository.save(assignment);
